@@ -11,5 +11,8 @@ RUN yarn install
 # Then copy the rest of the files
 COPY . .
 
+# Compile the fairmint-canton/scripts submodule
+RUN cd src/chain-operations/canton/lib/fairmint-canton/scripts && yarn install && yarn build
+
 EXPOSE 8080
 CMD ["yarn", "dev"]
