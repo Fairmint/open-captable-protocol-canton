@@ -48,6 +48,9 @@ jobs:
       - name: Check Formatting
         run: yarn format:check
 
+      - name: Build Application
+        run: npx esbuild src/app.js --bundle --platform=node --outfile=dist/app.cjs
+
       # Build and Deploy
       - name: Deploy
         shell: bash
@@ -116,7 +119,7 @@ jobs:
               echo 'Building image on host...' && \
               # Source the functions
               source ./scripts/docker_container_utils.sh && \
-              docker build -t ocp-dev:${DEPLOY_TIME} -f Dockerfile.dev . && \
+              docker build -t ocp-dev:${DEPLOY_TIME} -f Dockerfile . && \
 
               # Initial cleanup
               echo 'Cleaning up old resources...' && \
@@ -135,7 +138,6 @@ jobs:
               --health-interval='2s' \
               --health-retries='3' \
               --health-timeout='5s' \
-              --restart always \
               -e DOCKER_ENV='true' \
               -e NODE_ENV='development' \
               -e SENTRY_DSN='${SENTRY_DSN}' \
